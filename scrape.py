@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-import pdb
-
+import csv
 import requests
 from bs4 import BeautifulSoup
 
@@ -56,8 +55,6 @@ def grant_info(grant_url):
     info.update(aside)
     info.update(headings)
 
-    pdb.set_trace()
-    
     return info
 
 
