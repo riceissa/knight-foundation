@@ -6,4 +6,4 @@ Specific issue: https://github.com/vipulnaik/donations/issues/45
 
 ## License
 
-CC0.
+CC0 except for the data.
