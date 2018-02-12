@@ -6,10 +6,24 @@ import requests
 from bs4 import BeautifulSoup
 
 def main():
-    url = "https://knightfoundation.org/grants?content_sources=grant&page=1"
+    page = 181
+    url = "https://knightfoundation.org/grants?content_sources=grant&page="
+    done = False
+    while not done:
+        count = 0  # Track how many grants are on the page
+        for grant_url in grant_urls(url + str(page)):
+            print(page, grant_info(grant_url))
+            count += 1
+
+        # There were no grants on this page, so we must have gone past
+        # the final page of grants
+        if count == 0:
+            done = True
+
+        page += 1
 
 
-def get_grant_info(grant_url):
+def grant_info(grant_url):
     """Get info off a single grant page."""
     soup = BeautifulSoup(requests.get(grant_url).content, "lxml")
 
@@ -29,7 +43,6 @@ def get_grant_info(grant_url):
                 "Project Team": ""}
 
     for h3 in soup.find_all("h3"):
-        # pdb.set_trace()
         text = h3.text
         if text in headings:
             tag = h3.next_element
@@ -42,7 +55,7 @@ def get_grant_info(grant_url):
     return aside
 
 
-def grants_urls(url):
+def grant_urls(url):
     """Find all specific grants page URLs on the given page."""
     soup = BeautifulSoup(requests.get(url).content, "lxml")
     for path in filter(lambda x: str(x).startswith("/grants/"),
