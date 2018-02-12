@@ -27,6 +27,9 @@ def grant_info(grant_url):
     """Get info off a single grant page."""
     soup = BeautifulSoup(requests.get(grant_url).content, "lxml")
 
+    info = {"url": grant_url,
+            "grantee": soup.find("h2").text.strip()}
+
     aside = {"Date Awarded": "",
              "Period": "",
              "Amount": "",
@@ -50,9 +53,12 @@ def grant_info(grant_url):
                 tag = tag.next_element
             headings[text] = tag.text.strip()
 
-    aside.update(headings)
+    info.update(aside)
+    info.update(headings)
+
+    pdb.set_trace()
     
-    return aside
+    return info
 
 
 def grant_urls(url):
