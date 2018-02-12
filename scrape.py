@@ -8,18 +8,23 @@ def main():
     page = 1
     url = "https://knightfoundation.org/grants?content_sources=grant&page="
     done = False
-    while not done:
-        count = 0  # Track how many grants are on the page
-        for grant_url in grant_urls(url + str(page)):
-            print(page, grant_info(grant_url))
-            count += 1
+    with open("data.csv", "w") as f:
+        fieldnames = ["grantee", "url", "Date Awarded", "Period", "Amount",
+                      "Focus Area", "Challenge", "Goal", "Project Team"]
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        while not done:
+            count = 0  # Track how many grants are on the page
+            for grant_url in grant_urls(url + str(page)):
+                writer.writerow(grant_info(grant_url))
+                count += 1
 
-        # There were no grants on this page, so we must have gone past
-        # the final page of grants
-        if count == 0:
-            done = True
+            # There were no grants on this page, so we must have gone past
+            # the final page of grants
+            if count == 0:
+                done = True
 
-        page += 1
+            page += 1
 
 
 def grant_info(grant_url):
