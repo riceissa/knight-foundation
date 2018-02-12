@@ -6,7 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 
 def main():
-    page = 181
+    page = 1
     url = "https://knightfoundation.org/grants?content_sources=grant&page="
     done = False
     while not done:
