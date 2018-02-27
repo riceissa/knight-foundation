@@ -27,7 +27,7 @@ def main():
                       if row['Challenge'] else "") +
                      ("project team: " + row['Project Team'] + "; "
                       if row['Project Team'] else "") +
-                     ("goal: " + row['Goal'] + "; "
+                     ("goal: " + trimmed(row['Goal']) + "; "
                       if row['Goal'] else ""))
             notes = notes.strip(" ;")
             notes = notes[0].upper() + notes[1:]
@@ -65,6 +65,17 @@ def mysql_quote(x):
     x = x.replace("\n", "\\n")
     return "'{}'".format(x)
 
+
+def trimmed(goal, num=200):
+    """Trim the goal column to ``num`` words so it fits in the notes column."""
+    words = goal.split()
+    trimmed_words = words[:num]
+    joined = " ".join(trimmed_words)
+    if len(trimmed_words) < len(words):
+        # trimmed_words is actually shorter than words, so we have cut
+        # something out
+        joined += " […]"
+    return joined
 
 
 if __name__ == "__main__":
