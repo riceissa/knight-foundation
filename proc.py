@@ -2,6 +2,7 @@
 
 import csv
 import datetime
+import re
 
 def main():
     with open("data.csv", "r") as f:
@@ -21,6 +22,10 @@ def main():
                 donation_date = ""
                 donation_date_precision = ""
 
+            project_team = row['Project Team']
+            project_team = re.sub(r",? inc\.?$", "", project_team,
+                                  flags=re.IGNORECASE)
+
             notes = (("grant period: " + row['Period'] + "; "
                       if row['Period'] else "") +
                      ("part of the challenge: " + row['Challenge'] + "; "
@@ -32,7 +37,7 @@ def main():
 
             print(("    " if first else "    ,") + "(" + ",".join([
                 mysql_quote("Knight Foundation"),  # donor
-                mysql_quote(row['Project Team']),  # donee
+                mysql_quote(project_team),  # donee
                 str(amount),  # amount
                 mysql_quote(donation_date),  # donation_date
                 mysql_quote(donation_date_precision),  # donation_date_precision
