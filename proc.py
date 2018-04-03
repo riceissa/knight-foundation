@@ -10,7 +10,7 @@ def main():
         print("""insert into donations (donor, donee, amount, donation_date,
         donation_date_precision, donation_date_basis, cause_area, url,
         donor_cause_area_url, notes, affected_countries, affected_states,
-        affected_cities, affected_regions) values""")
+        affected_cities, affected_regions, donation_earmark) values""")
 
         for row in reader:
             amount = float(row['Amount'].replace("$", "").replace(",", "").strip())
@@ -25,8 +25,6 @@ def main():
                       if row['Period'] else "") +
                      ("part of the challenge: " + row['Challenge'] + "; "
                       if row['Challenge'] else "") +
-                     ("project team: " + row['Project Team'] + "; "
-                      if row['Project Team'] else "") +
                      ("goal: " + trimmed(row['Goal']) + "; "
                       if row['Goal'] else ""))
             notes = notes.strip(" ;")
@@ -34,7 +32,7 @@ def main():
 
             print(("    " if first else "    ,") + "(" + ",".join([
                 mysql_quote("Knight Foundation"),  # donor
-                mysql_quote(row['grantee']),  # donee
+                mysql_quote(row['Project Team']),  # donee
                 str(amount),  # amount
                 mysql_quote(donation_date),  # donation_date
                 mysql_quote(donation_date_precision),  # donation_date_precision
@@ -47,6 +45,7 @@ def main():
                 mysql_quote(""),  # affected_states
                 mysql_quote(""),  # affected_cities
                 mysql_quote(""),  # affected_regions
+                mysql_quote(row['grantee']),  # donation_earmark
             ]) + ")")
             first = False
         print(";")
